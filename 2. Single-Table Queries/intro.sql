@@ -18,6 +18,22 @@ FROM Sales.Orders;
 
 -- The WHERE Clause
 
-SELECT custid, orderid, empid, orderdate, freight
+SELECT orderid, empid, orderdate, freight
 FROM Sales.Orders
 WHERE custid = 71;
+
+-- The GROUP BY Clause
+
+SELECT empid, YEAR(orderdate) as orderyear
+FROM Sales.Orders
+WHERE custid = 71
+GROUP BY empid, YEAR(orderdate);
+
+SELECT
+  empid,
+  YEAR(orderdate) AS orderyear, -- conversion, not aggregate function
+  SUM(freight) AS totalfreight,
+  COUNT(*) AS numorders
+FROM Sales.Orders
+WHERE custid = 71
+GROUP BY empid, YEAR(orderdate);
