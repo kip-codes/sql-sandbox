@@ -61,7 +61,8 @@ GROUP BY empid, YEAR(orderdate);
 
 SELECT
   empid,
-  YEAR(orderdate) AS orderyear
+  YEAR(orderdate) AS orderyear,
+  COUNT(*) AS numorders -- with the HAVING clause, count(*) == 1 will not be printed.
 FROM Sales.Orders
 WHERE custid = 71
 GROUP BY empid, YEAR(orderdate)
