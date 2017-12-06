@@ -67,4 +67,84 @@ FROM Sales.Orders
 WHERE custid = 71
 GROUP BY empid, YEAR(orderdate)
 HAVING COUNT(*) > 1
-ORDER BY empid
+ORDER BY YEAR(orderdate);
+
+
+-- The ORDER BY Clause
+-- Presentation ordering is important because SQL does not guarantee table ordering
+-- Tables are represented as sets without order relevance.
+-- The ORDER BY phase is the only phase processed after SELECT, so can use alias.
+
+SELECT
+  empid,
+  YEAR(orderdate) AS orderyear,
+  COUNT(*) AS numorders
+FROM Sales.Orders
+WHERE custid = 71
+GROUP BY empid, YEAR(orderdate)
+HAVING COUNT(*) > 1
+ORDER BY empid, orderyear;
+
+
+SELECT empid, firstname, lastname, country
+FROM HR.Employees
+ORDER BY hiredate;
+
+
+-- The TOP filter
+
+SELECT TOP(5) orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate DESC;
+
+-- SELECT TOP(5) orderid, orderdate, custid, empid
+-- FROM Sales.Orders
+-- ORDER BY orderdate DESC, orderid DESC;
+
+SELECT TOP(1) PERCENT orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate DESC;
+
+SELECT orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate, orderid
+OFFSET 0 ROWS FETCH NEXT 1 ROW ONLY;  -- skip 50 rows, retrieve next 25
+
+
+-- Windows Functions
+
+SELECT orderid, custid, val,
+  ROW_NUMBER() OVER(PARTITION BY custid
+                    ORDER BY val) AS rownum
+FROM Sales.OrderValues
+ORDER BY custid, val;
+
+
+-- Predicates and Operators
+
+SELECT orderid, empid, orderdate
+FROM Sales.Orders
+WHERE orderid BETWEEN 10300 AND 10310; -- BETWEEN
+
+SELECT empid, firstname, lastname
+FROM HR.Employees
+WHERE lastname LIKE N'D%'; -- LIKE | N stands for 'National' | % represents wild carat
+
+
+-- Case Expressions
+
+SELECT productid, productname, categoryid,
+  CASE categoryid
+    WHEN 1 THEN 'Beverages'
+    WHEN 2 THEN 'Condiments'
+    WHEN 3 THEN 'Confections'
+    WHEN 4 THEN 'Dairy Products'
+    WHEN 5 THEN 'Grains/Cereals'
+    WHEN 6 THEN 'Meat/Poultry'
+    WHEN 7 THEN 'Produce'
+    WHEN 8 THEN 'Seafood'
+    ELSE 'Unknown Category'
+  END AS categoryname
+FROM Production.Products
+ORDER BY categoryname DESC;
+
