@@ -156,5 +156,6 @@ ORDER BY
     WHEN region IS NULL THEN 1
     ELSE 0
   END, region;
+-- CORRECT
 
 -- Turns out, GROUP BY is not necessary because there was no aggregate function in the SELECT clause.
