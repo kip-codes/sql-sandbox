@@ -24,7 +24,7 @@ FROM HR.Employees
     ON n <= DATEDIFF(DAY, '20090612', '20090616') + 1
 ORDER BY empid;
 -- CORRECT
--- Solution uses WHERE with a CROSS JOIN instead of JOIN ON, but gives same results
+-- Solution book uses WHERE with a CROSS JOIN instead of JOIN ON, but gives same results
 
 
 /*
@@ -57,9 +57,69 @@ SELECT c.custid, c.companyname, o.orderid, o.orderdate
 FROM Sales.Customers AS c
   LEFT JOIN Sales.Orders AS o
     ON c.custid = o.custid
+;
 -- CORRECT
 
 
 /*
-4.
+4. Return customers who placed no orders.
+-- Tables involved: Sales.Customers and Sales.Orders
  */
+
+USE TSQL2012;
+SELECT c.custid, c.companyname
+FROM Sales.Customers AS c
+  LEFT JOIN Sales.Orders AS o
+    ON c.custid = o.custid
+WHERE o.orderid IS NULL
+;
+-- CORRECT
+
+
+/*
+5. Return customers with orders placed on February 12, 2007, along with their orders.
+Tables involved: Sales.Customers and Sales.Orders
+ */
+
+USE TSQL2012;
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers as c
+  JOIN Sales.Orders as o
+    ON c.custid = o.custid
+WHERE o.orderdate = '20070212'
+;
+-- CORRECT
+
+
+/*
+6. Return customers with orders placed on February 12, 2007, along with their orders.
+Also return customers who didn't place orders on February 12, 2007.
+-- Tables involved: Sales.Customers and Sales.Orders
+ */
+
+USE TSQL2012;
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers as c
+  LEFT JOIN Sales.Orders as o
+    ON c.custid = o.custid AND O.orderdate = '20070212'
+;
+-- DID NOT COMPLETE
+-- Need to practice filtering in WHERE vs. ON clauses
+
+
+/*
+7. Return all customers, and for each return a Yes/No value depending on whether the customer placed an order on
+February 12, 2007.
+-- Tables involved: Sales.Customers and Sales.Orders
+ */
+
+USE TSQL2012;
+SELECT c.custid, c.companyname
+  , (CASE WHEN o.orderid IS NULL THEN 'No' ELSE 'Yes' END) as HasOrderOn0070212
+FROM Sales.Customers as c
+  LEFT JOIN Sales.Orders as o
+    ON c.custid = o.custid AND O.orderdate = '20070212'
+;
+-- CORRECT
+-- Used Solution for #6 as guideline.
+-- Solution book suggests using DISTINCT to print only one row per customer. However, the results are the same.
