@@ -27,3 +27,15 @@ FROM Sales.Orders as s1
     AND s1.orderdate = s2.maxorderdate
 -- CORRECT
 -- Need to improve on organizing code
+
+
+/*
+2-1. Write a query that calculates a row number for each order based on orderdate, orderid ordering
+-- Tables involved: Sales.Orders
+ */
+
+USE TSQL2012;
+SELECT orderid, orderdate, custid, empid
+  ,row_number() OVER (ORDER BY orderdate, orderid) as rownum
+FROM Sales.Orders;
+-- CORRECT!
