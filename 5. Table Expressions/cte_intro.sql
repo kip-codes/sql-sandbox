@@ -44,3 +44,45 @@ SELECT YEAR(orderdate) AS orderyear, COUNT(DISTINCT custid) AS numcusts
 FROM Sales.Orders
 GROUP BY YEAR(orderdate)
 HAVING COUNT(DISTINCT custid) > 70;
+
+
+-- COMMON TABLE EXPRESSIONS
+
+/*
+
+ Format:
+
+ WITH <CTE_Name> [(<target_column_list>)]
+ AS
+ (
+    <inner_query_defining_CTE>
+ )
+ <outer_query_against_CTE>;
+
+  */
+
+WITH USACusts AS
+(
+  SELECT custid, companyname
+  FROM Sales.Customers
+  WHERE country = N'USA'
+)
+SELECT * FROM USACusts;
+
+
+-- DEFINING MULTIPLE CTEs
+
+WITH C1 AS
+(
+  SELECT YEAR(orderdate) AS orderyear, custid
+  FROM Sales.Orders
+),
+C2 AS
+(
+  SELECT orderyear, COUNT(DISTINCT custid) AS numcusts
+  FROM C1
+  GROUP BY orderyear
+)
+SELECT orderyear, numcusts
+FROM C2
+WHERE numcusts > 70;
