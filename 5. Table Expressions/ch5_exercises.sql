@@ -16,3 +16,14 @@ and the Orders table to return teh orders with the maximum order date for each e
 -- Tables involved: Sales.Orders
  */
 
+USE TSQL2012;
+SELECT s1.empid, s1.orderdate, s1.orderid, s1.custid
+FROM Sales.Orders as s1
+  JOIN
+    (SELECT empid, MAX(orderdate) as maxorderdate
+    FROM Sales.Orders
+    GROUP BY empid) as s2
+  ON s2.empid = s1.empid
+    AND s1.orderdate = s2.maxorderdate
+-- CORRECT
+-- Need to improve on organizing code
