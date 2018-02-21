@@ -47,3 +47,4 @@ Use a common table expression (CTE) to encapsulate the code from Exercise 2-1.
 -- Tables involved: Sales.Orders
  */
 
+USE TSQL2012;
