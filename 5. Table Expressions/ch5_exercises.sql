@@ -48,3 +48,13 @@ Use a common table expression (CTE) to encapsulate the code from Exercise 2-1.
  */
 
 USE TSQL2012;
+WITH IncludeRows AS
+(
+  SELECT orderid, orderdate, custid, empid
+    ,row_number() OVER (ORDER BY orderdate, orderid) as rownum
+  FROM Sales.Orders
+)
+SELECT *
+FROM IncludeRows
+WHERE rownum >= 11 and rownum <= 20;
+-- Correct!
