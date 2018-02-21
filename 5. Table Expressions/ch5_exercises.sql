@@ -39,3 +39,11 @@ SELECT orderid, orderdate, custid, empid
   ,row_number() OVER (ORDER BY orderdate, orderid) as rownum
 FROM Sales.Orders;
 -- CORRECT!
+
+
+/*
+2-2. Write a query that returns rows with row numbers 11 through 20 based on the row number definition in Exercise 2-1.
+Use a common table expression (CTE) to encapsulate the code from Exercise 2-1.
+-- Tables involved: Sales.Orders
+ */
+
