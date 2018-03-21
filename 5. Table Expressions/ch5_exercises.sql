@@ -58,3 +58,56 @@ SELECT *
 FROM IncludeRows
 WHERE rownum >= 11 and rownum <= 20;
 -- Correct!
+
+
+/*
+3. Write a solution using a recursive CTE that returns the management chain leading to Zoya Dolgopyatova, EID 9
+-- Tables involved: HR.Employees
+ */
+
+USE TSQL2012;
+WITH Zoya AS
+(
+  SELECT empid, mgrid, firstname, lastname
+  FROM HR.Employees
+  WHERE empid = 9 -- Zoya's employee ID
+
+  UNION ALL
+
+  SELECT E.empid, E.mgrid, E.firstname, E.lastname
+  FROM Zoya
+    JOIN HR.Employees E
+    ON Zoya.mgrid = E.empid
+)
+SELECT *
+FROM Zoya;
+-- Correct
+-- Need to review recursion: is recursion cost-efficient?
+
+
+/*
+4-1. Create a view that returns the total quantity for each employee and year.
+-- Tables involved: Sales.Orders, Sales.OrderDetails
+ */
+
+USE TSQL2012;
+ALTER VIEW Sales.VEmpOrders AS
+  (
+      SELECT O.empid, YEAR(O.orderdate) AS orderyear, SUM(OD.qty) AS qty
+      FROM Sales.Orders O
+        JOIN Sales.OrderDetails OD
+          ON O.orderid = OD.orderid
+      GROUP BY O.empid, YEAR(O.orderdate)
+  )
+SELECT *
+FROM Sales.VEmpOrders
+ORDER BY empid, orderyear;
+-- CORRECT
+
+
+/*
+4-2. Write a query against Sales.VEmpOrders that returns the running total quantity for each employee and year.
+Tables involved: Sales.VEmpOrders
+ */
+
+USE TSQL2012;
